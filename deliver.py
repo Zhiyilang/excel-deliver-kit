@@ -66,6 +66,30 @@ def _cols(rows: Sequence[Dict]) -> List[str]:
     return out
 
 
+def _fmt_num(v: float) -> str:
+    """数字转干净字符串：2000.0 -> "2000"，2000.5 -> "2000.5"。"""
+    if v == int(v):
+        return str(int(v))
+    return ("%.2f" % v).rstrip("0").rstrip(".")
+
+
+def _normalize_numeric(rows: Sequence[Dict], cols: Sequence[str]) -> List[Dict]:
+    """把数值列规范成纯数字字符串（剥掉 ¥ / 千分位 / 百分号）。
+
+    财务导出的表金额常是 "¥1,200.00"，聚合引擎认不出来会算成 0，
+    所以汇总前必须先规范化。这是真实交付中会踩的坑。
+    """
+    out: List[Dict] = []
+    for r in rows:
+        nr = dict(r)
+        for c in cols:
+            if c in nr:
+                v = _num(nr.get(c))
+                nr[c] = "" if v is None else _fmt_num(v)
+        out.append(nr)
+    return out
+
+
 def _safe(name: str) -> str:
     """文件名安全化（Windows 非法字符 + 空值）。"""
     t = re.sub(r'[\\/:*?"<>|\r\n\t]', "_", str(name).strip())
@@ -179,6 +203,10 @@ def cmd_pivot(args):
         if c not in _cols(rows):
             print("警告：列「%s」不在文件里（将按空值处理）。实际列：%s"
                   % (c, ", ".join(_cols(rows))))
+    # 汇总前先规范化数值列：否则 "¥1,200.00" 这类财务常见格式会被算成 0
+    num_cols = [a["col"] for a in aggs if a["func"] != "count"]
+    rows = _normalize_numeric(rows, num_cols)
+
     res = PE.pivot(rows, group_by=group_by, aggs=aggs)
     n = _write(res["summary"], args.output, columns=res["group_cols"] + res["value_cols"])
     print("透视完成：%d 行 → %d 组" % (res["stats"]["input_rows"], res["stats"]["groups"]))
