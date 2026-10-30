@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Excel 交付工具箱 · 零依赖数据处理</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e5e7eb;--brand:#2563eb;--brand2:#0ea5e9;--ok:#16a34a;--warn:#d97706;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;padding:0 16px 64px}
+  .wrap{max-width:880px;margin:0 auto}
+  header{padding:48px 0 28px;text-align:center}
+  h1{font-size:30px;letter-spacing:.5px}
+  .tag{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;background:#eef2ff;color:var(--brand);font-size:13px;font-weight:600}
+  .lead{color:var(--sub);margin-top:14px;font-size:15px}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .btn{padding:11px 20px;border-radius:10px;font-weight:600;text-decoration:none;font-size:14px}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--line)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px;margin-top:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  h2{font-size:19px;margin-bottom:6px}
+  h2 .n{color:var(--brand);font-weight:800;margin-right:8px}
+  p.d{color:var(--sub);font-size:14px;margin-bottom:12px}
+  pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.5}
+  code{font-family:"SFMono-Regular",Consolas,Menlo,monospace}
+  table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}
+  th,td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+  th{background:#f1f5f9}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.row{grid-template-columns:1fr}}
+  .pill{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:600}
+  .pill.ok{background:#dcfce7;color:var(--ok)}
+  .pill.warn{background:#fef3c7;color:var(--warn)}
+  .feat{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .feat span{background:#f1f5f9;border-radius:8px;padding:5px 11px;font-size:13px;color:#334155}
+  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:30px}
+  a{color:var(--brand)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Excel 交付工具箱</h1>
+    <span class="tag">零第三方依赖 · 纯 Python 标准库 · 一条命令出结果</span>
+    <p class="lead">合并 / 清洗 / 透视 / 拆分 / 双表对账，全部本地运行，输出真实 .xlsx。<br>为闲鱼 Excel 代做接单而生，交付成本压到接近 0。</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Zhiyilang/excel-deliver-kit">GitHub 仓库</a>
+      <a class="btn ghost" href="https://github.com/Zhiyilang/excel-deliver-kit#使用">查看用法</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>为什么用它</h2>
+    <p class="d">不装 openpyxl / pandas，只用标准库读写 xlsx（zipfile + xml 最小实现），双击即跑、随处可分发。</p>
+    <div class="feat">
+      <span>✅ .xlsx 与 .csv 混合读写</span>
+      <span>✅ 金额按数值比较（100 = 100.00）</span>
+      <span>✅ 输出可被 Excel / WPS 直接打开</span>
+      <span>✅ 单文件可独立分发</span>
+      <span>✅ 命令行一行出结果</span>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">01</span>多表合并 merge</h2>
+    <p class="d">多个文件堆叠成一张表，表头自动并集，可按主键去重并标注来源。</p>
+    <pre><code>python deliver.py merge a.csv b.csv c.xlsx -o 合并结果.xlsx --key 订单号 --dedup</code></pre>
+  </section>
+
+  <section>
+    <h2><span class="n">02</span>数据清洗 clean</h2>
+    <p class="d">去空格、删空行、按列去重、空值填充。</p>
+    <pre><code>python deliver.py clean 脏表.csv -o 清洗结果.xlsx --dedup --key 订单号,手机号</code></pre>
+  </section>
+
+  <section>
+    <h2><span class="n">03</span>透视汇总 pivot</h2>
+    <p class="d">按维度分组做 sum / count / avg / max / min 聚合。</p>
+    <pre><code>python deliver.py pivot 表.csv -o 透视.xlsx --by 城市 --agg 金额:sum:金额合计 金额:count:笔数</code></pre>
+    <div class="row">
+      <div><p class="d">输入（按城市）</p>
+      <table><tr><th>城市</th><th>金额</th></tr><tr><td>上海</td><td>100</td></tr><tr><td>北京</td><td>200</td></tr><tr><td>上海</td><td>150</td></tr></table></div>
+      <div><p class="d">输出（透视后）</p>
+      <table><tr><th>城市</th><th>金额合计</th></tr><tr><td>上海</td><td>250</td></tr><tr><td>北京</td><td>200</td></tr></table></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">04</span>按列拆分 split</h2>
+    <p class="d">一张总表按某列自动拆成多个文件，文件名即该列的值。</p>
+    <pre><code>python deliver.py split 总表.xlsx --by 城市 --outdir 拆分结果 --xlsx</code></pre>
+  </section>
+
+  <section>
+    <h2><span class="n">05</span>双表对账 recon</h2>
+    <p class="d">按主键逐行比对，输出三张结果：仅在 A / 仅在 B / 数值不一致（精确到单元格）。</p>
+    <pre><code>python deliver.py recon A.xlsx B.xlsx --key 订单号 --outdir 核对结果 --xlsx</code></pre>
+    <table>
+      <tr><th>结果文件</th><th>含义</th><th>示例</th></tr>
+      <tr><td>1_仅在表A.xlsx</td><td>A 有 B 无</td><td class="pill ok">2 行</td></tr>
+      <tr><td>2_仅在表B.xlsx</td><td>B 有 A 无</td><td class="pill ok">1 行</td></tr>
+      <tr><td>3_数值不一致.xlsx</td><td>主键同但内容异</td><td class="pill warn">0 行</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>接单者背景</h2>
+    <p class="d">支一郎（Zhiyilang）· RPA 开发 1 年经验，影刀 / 来也 UiBot 实操，可独立带项目。本工具已用于真实 Excel 代做交付，多数单 5–15 分钟出结果。</p>
+  </section>
+
+  <footer>
+    开源协议 MIT · <a href="https://github.com/Zhiyilang/excel-deliver-kit">github.com/Zhiyilang/excel-deliver-kit</a>
+  </footer>
+</div>
+</body>
+</html>
