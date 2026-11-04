@@ -1,116 +1,118 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Excel 交付工具箱 · 零依赖数据处理</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>支一郎 / Zhiyilang — 零依赖工具、Excel/RPA 代做与数字产品</title>
+<meta name="description" content="支一郎（Zhiyilang）：纯 Python 标准库零依赖命令行工具、Excel/RPA 自动化代做与定制、可下载数字产品。先报价后付款，微信/支付宝结算。">
+<meta name="keywords" content="零依赖工具,Python标准库,Excel合并,对账,工资核算,RPA代做,影刀,UiBot,自动化脚本,定制开发,数字产品">
+<meta property="og:title" content="支一郎 / Zhiyilang — 零依赖工具与 Excel/RPA 代做">
+<meta property="og:description" content="零依赖命令行工具、Excel/RPA 自动化代做、可下载数字产品。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zhiyilang.github.io/">
+<link rel="canonical" href="https://zhiyilang.github.io/">
 <style>
-  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2329;--sub:#6b7280;--line:#e5e7eb;--brand:#2563eb;--brand2:#0ea5e9;--ok:#16a34a;--warn:#d97706;}
+  :root{--bg:#ffffff;--fg:#1a1a2e;--muted:#5b6472;--accent:#2563eb;--accent2:#0ea5e9;--card:#f7f9fc;--border:#e4e9f2;--code:#0f172a}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;padding:0 16px 64px}
-  .wrap{max-width:880px;margin:0 auto}
-  header{padding:48px 0 28px;text-align:center}
-  h1{font-size:30px;letter-spacing:.5px}
-  .tag{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;background:#eef2ff;color:var(--brand);font-size:13px;font-weight:600}
-  .lead{color:var(--sub);margin-top:14px;font-size:15px}
-  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-  .btn{padding:11px 20px;border-radius:10px;font-weight:600;text-decoration:none;font-size:14px}
-  .btn.primary{background:var(--brand);color:#fff}
-  .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--line)}
-  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px;margin-top:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-  h2{font-size:19px;margin-bottom:6px}
-  h2 .n{color:var(--brand);font-weight:800;margin-right:8px}
-  p.d{color:var(--sub);font-size:14px;margin-bottom:12px}
-  pre{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.5}
-  code{font-family:"SFMono-Regular",Consolas,Menlo,monospace}
-  table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}
-  th,td{border:1px solid var(--line);padding:6px 10px;text-align:left}
-  th{background:#f1f5f9}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:640px){.row{grid-template-columns:1fr}}
-  .pill{display:inline-block;padding:2px 9px;border-radius:6px;font-size:12px;font-weight:600}
-  .pill.ok{background:#dcfce7;color:var(--ok)}
-  .pill.warn{background:#fef3c7;color:var(--warn)}
-  .feat{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .feat span{background:#f1f5f9;border-radius:8px;padding:5px 11px;font-size:13px;color:#334155}
-  footer{text-align:center;color:var(--sub);font-size:13px;margin-top:30px}
-  a{color:var(--brand)}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--fg);line-height:1.7;max-width:920px;margin:0 auto;padding:0 20px 64px}
+  header{padding:56px 0 28px;border-bottom:1px solid var(--border);margin-bottom:36px}
+  h1{font-size:2rem;letter-spacing:-.5px}
+  .sub{color:var(--muted);font-size:1.05rem;margin-top:8px}
+  h2{font-size:1.35rem;margin:44px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+  h3{font-size:1.08rem}
+  p{color:var(--fg)}
+  .lead{color:var(--muted);font-size:1.02rem;margin:14px 0 26px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:8px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 18px 16px;transition:.15s}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 18px rgba(37,99,235,.08)}
+  .card h3 a{color:var(--fg);text-decoration:none}
+  .card h3 a:hover{color:var(--accent)}
+  .card p{color:var(--muted);font-size:.92rem;min-height:42px}
+  code{background:#eef2f9;color:var(--code);padding:2px 6px;border-radius:5px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .install{margin-top:10px;font-size:.82rem;color:var(--accent2);word-break:break-all}
+  .price{display:inline-block;margin-top:8px;font-weight:700;color:var(--accent);font-size:.95rem}
+  .cta{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-radius:14px;padding:26px 24px;margin:40px 0 8px;text-align:center}
+  .cta h2{border:none;color:#fff;margin:0 0 8px;padding:0}
+  .cta p{color:#eaf2ff;margin-bottom:16px}
+  .btn{display:inline-block;background:#fff;color:var(--accent);font-weight:600;padding:11px 22px;border-radius:9px;text-decoration:none;font-size:.95rem;margin:4px}
+  .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.7)}
+  .btn:hover{opacity:.9}
+  .order{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:12px}
+  .order table{width:100%;border-collapse:collapse;font-size:.94rem}
+  .order th,.order td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--border)}
+  .order th{color:var(--muted);font-weight:600}
+  .order td:last-child{color:var(--accent);font-weight:700;white-space:nowrap}
+  .note{color:var(--muted);font-size:.88rem;margin-top:14px}
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem;text-align:center}
+  ul.points{margin:10px 0 0 20px;color:var(--muted);font-size:.95rem}
+  ul.points li{margin:4px 0}
+  .tag{display:inline-block;background:#eef2f9;color:var(--accent);font-size:.72rem;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  a{color:var(--accent)}
 </style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"支一郎 (Zhiyilang)","url":"https://zhiyilang.github.io/","description":"RPA 开发转 AI Agent 工程，零依赖命令行工具作者，提供 Excel/RPA 自动化代做与定制。","sameAs":["https://github.com/Zhiyilang"],"knowsAbout":["Python","RPA","AI Agents","Excel 自动化","命令行工具"]}
+</script>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Excel 交付工具箱</h1>
-    <span class="tag">零第三方依赖 · 纯 Python 标准库 · 一条命令出结果</span>
-    <p class="lead">合并 / 清洗 / 透视 / 拆分 / 双表对账，全部本地运行，输出真实 .xlsx。<br>为闲鱼 Excel 代做接单而生，交付成本压到接近 0。</p>
-    <div class="cta">
-      <a class="btn primary" href="https://github.com/Zhiyilang/excel-deliver-kit">GitHub 仓库</a>
-      <a class="btn ghost" href="https://github.com/Zhiyilang/excel-deliver-kit#使用">查看用法</a>
-    </div>
-  </header>
+<header>
+  <h1>支一郎 / Zhiyilang</h1>
+  <div class="sub">RPA 开发 → AI Agent 工程 · 零依赖工具作者 · 承接 Excel / RPA 自动化代做与定制</div>
+</header>
 
-  <section>
-    <h2>为什么用它</h2>
-    <p class="d">不装 openpyxl / pandas，只用标准库读写 xlsx（zipfile + xml 最小实现），双击即跑、随处可分发。</p>
-    <div class="feat">
-      <span>✅ .xlsx 与 .csv 混合读写</span>
-      <span>✅ 金额按数值比较（100 = 100.00）</span>
-      <span>✅ 输出可被 Excel / WPS 直接打开</span>
-      <span>✅ 单文件可独立分发</span>
-      <span>✅ 命令行一行出结果</span>
-    </div>
-  </section>
+<section>
+  <p class="lead">所有工具均为<strong>纯 Python 标准库实现</strong>：单个 <code>.py</code> 文件即可运行，无需 <code>pip install</code>、无网络请求、跨 Win / Mac / Linux。下载即用，可审计、可移植。需要定制或代做，见下方<a href="#order">接单报价</a>。</p>
+</section>
 
-  <section>
-    <h2><span class="n">01</span>多表合并 merge</h2>
-    <p class="d">多个文件堆叠成一张表，表头自动并集，可按主键去重并标注来源。</p>
-    <pre><code>python deliver.py merge a.csv b.csv c.xlsx -o 合并结果.xlsx --key 订单号 --dedup</code></pre>
-  </section>
-
-  <section>
-    <h2><span class="n">02</span>数据清洗 clean</h2>
-    <p class="d">去空格、删空行、按列去重、空值填充。</p>
-    <pre><code>python deliver.py clean 脏表.csv -o 清洗结果.xlsx --dedup --key 订单号,手机号</code></pre>
-  </section>
-
-  <section>
-    <h2><span class="n">03</span>透视汇总 pivot</h2>
-    <p class="d">按维度分组做 sum / count / avg / max / min 聚合。</p>
-    <pre><code>python deliver.py pivot 表.csv -o 透视.xlsx --by 城市 --agg 金额:sum:金额合计 金额:count:笔数</code></pre>
-    <div class="row">
-      <div><p class="d">输入（按城市）</p>
-      <table><tr><th>城市</th><th>金额</th></tr><tr><td>上海</td><td>100</td></tr><tr><td>北京</td><td>200</td></tr><tr><td>上海</td><td>150</td></tr></table></div>
-      <div><p class="d">输出（透视后）</p>
-      <table><tr><th>城市</th><th>金额合计</th></tr><tr><td>上海</td><td>250</td></tr><tr><td>北京</td><td>200</td></tr></table></div>
-    </div>
-  </section>
-
-  <section>
-    <h2><span class="n">04</span>按列拆分 split</h2>
-    <p class="d">一张总表按某列自动拆成多个文件，文件名即该列的值。</p>
-    <pre><code>python deliver.py split 总表.xlsx --by 城市 --outdir 拆分结果 --xlsx</code></pre>
-  </section>
-
-  <section>
-    <h2><span class="n">05</span>双表对账 recon</h2>
-    <p class="d">按主键逐行比对，输出三张结果：仅在 A / 仅在 B / 数值不一致（精确到单元格）。</p>
-    <pre><code>python deliver.py recon A.xlsx B.xlsx --key 订单号 --outdir 核对结果 --xlsx</code></pre>
-    <table>
-      <tr><th>结果文件</th><th>含义</th><th>示例</th></tr>
-      <tr><td>1_仅在表A.xlsx</td><td>A 有 B 无</td><td class="pill ok">2 行</td></tr>
-      <tr><td>2_仅在表B.xlsx</td><td>B 有 A 无</td><td class="pill ok">1 行</td></tr>
-      <tr><td>3_数值不一致.xlsx</td><td>主键同但内容异</td><td class="pill warn">0 行</td></tr>
-    </table>
-  </section>
-
-  <section>
-    <h2>接单者背景</h2>
-    <p class="d">支一郎（Zhiyilang）· RPA 开发 1 年经验，影刀 / 来也 UiBot 实操，可独立带项目。本工具已用于真实 Excel 代做交付，多数单 5–15 分钟出结果。</p>
-  </section>
-
-  <footer>
-    开源协议 MIT · <a href="https://github.com/Zhiyilang/excel-deliver-kit">github.com/Zhiyilang/excel-deliver-kit</a>
-  </footer>
+<h2>🛠️ 零依赖命令行工具（免费开源，MIT）</h2>
+<div class="grid">
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/billfusion">billfusion</a></h3><p>合并微信 / 支付宝 CSV 账单，自动分类、去重、生成月度报表。</p><div class="install">python billfusion.py wechat.csv alipay.csv</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/lanshare">lanshare</a></h3><p>同 Wi-Fi 下手机 ⇄ 电脑互传文件，纯 stdlib 起 HTTP 服务。</p><div class="install">python lanshare.py serve --port 8000</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/dupescan">dupescan</a></h3><p>SHA-256 跨目录查重，支持模式过滤、JSON / Markdown 输出。</p><div class="install">python dupescan.py ./photos --pattern "*.jpg"</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/csvdiff">csvdiff</a></h3><p>按主键对比两个 CSV / JSON，报告新增、删除与字段级变更。</p><div class="install">python csvdiff.py old.csv new.csv --key id</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/md2html">md2html</a></h3><p>Markdown → 带样式 HTML，离线零依赖，支持片段模式。</p><div class="install">python md2html.py doc.md -o doc.html</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/dirsize">dirsize</a></h3><p>目录体积分析，找大文件夹与文件，支持阈值过滤与 JSON 输出。</p><div class="install">python dirsize.py ./project --min 10M --top 20</div></div>
 </div>
+
+<h2>🛒 数字产品（源码公开，可直接拿去用）</h2>
+<div class="grid">
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/payroll-kit">工资条 / 考勤核算器</a></h3><p>缺勤迟到扣款 + 社保 + 月度个税累进，全中文表头，5/5 单测通过。</p><span class="price">¥9.9</span><div class="install">python main.py</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/rpa-to-ai-course">RPA → AI Agent 实战笔记</a></h3><p>5 节课程，含影刀实战、GPT-4 函数调用、Agent 编排，可直接抄的代码。</p><span class="price">¥19.9</span><div class="install">打开 index.html 即读</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/uibot_excel_recon">Excel 自动对账引擎</a></h3><p>两表按主键核对、输出差异清单，6/6 单测通过，纯标准库。</p><span class="price">免费 / 可定制</span><div class="install">python recon_engine.py a.csv b.csv</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/uibot-store-kits">UiBot 命令库套件</a></h3><p>Excel 清洗 4 命令 + 文件处理 3 命令，含上架文案。</p><span class="price">免费 / 可定制</span><div class="install">UiBot Creator 导入 .src</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/excel-deliver-kit">Excel 交付工具箱</a></h3><p>合并 / 清洗 / 透视 / 拆分 / 对账，含在线演示页。</p><span class="price">免费 / 可定制</span><div class="install">见仓库 README</div></div>
+  <div class="card"><h3><a href="https://github.com/Zhiyilang/csvdiff">CSV 合并工具包</a></h3><p>多表去重合并，含示例数据与可直接运行的脚本。</p><span class="price">¥6.6</span><div class="install">见 csvdiff 仓库</div></div>
+</div>
+<p class="note">以上产品源码均已 MIT 公开；付费版提供打包成品、中文说明与售后答疑。发货方式：邮件发送 zip。</p>
+
+<h2 id="order">💼 接单与报价</h2>
+<div class="order">
+<table>
+  <tr><th>服务</th><th>内容</th><th>交付</th><th>价格</th></tr>
+  <tr><td>Excel 代做</td><td>多表合并 / 清洗 / 拆分 / 对账 / 透视报表</td><td>24 小时内</td><td>¥50 起</td></tr>
+  <tr><td>脚本定制</td><td>按你的表格与规则写零依赖 Python 脚本，含注释与使用说明</td><td>2–3 天</td><td>¥200 起</td></tr>
+  <tr><td>RPA 机器人</td><td>影刀 / UiBot 流程开发、选择器修复、异常重试</td><td>3–5 天</td><td>¥500 起</td></tr>
+  <tr><td>企业定制</td><td>私有规则、内部 CI/CD 接入、批量部署</td><td>面议</td><td>¥1000 起</td></tr>
+</table>
+<p class="note">流程：发需求到邮箱 → 我回报价与工期 → 你确认后开工 → 交付验收 → 付款。<strong>先报价后付款，无预付款</strong>，微信 / 支付宝结算。数据可脱敏后发送，不接涉密与违规需求。</p>
+<p class="note">联系邮箱：<a href="mailto:2383844705@qq.com">2383844705@qq.com</a>（标题写「接单 + 需求类型」即可）</p>
+</div>
+
+<div class="cta">
+  <h2>☕ 支持开源 / 直接下单</h2>
+  <p>工具免费，觉得有用可以请杯咖啡；有 Excel / RPA 的活儿，直接发邮件最省事。</p>
+  <a class="btn" href="mailto:2383844705@qq.com?subject=%E6%8E%A5%E5%8D%95%20%2B%20%E9%9C%80%E6%B1%82%E5%92%A8%E8%AF%A2">邮件下单 / 询价 →</a>
+  <a class="btn ghost" href="https://afdian.com/a/Zhiyilang" target="_blank" rel="noopener">爱发电支持</a>
+</div>
+
+<h2>🏆 开源与实战</h2>
+<ul class="points">
+  <li>79 个公开仓库，全部 MIT 开源，纯 Python 标准库零依赖</li>
+  <li>微软 × 英超 Inside the Game 开发者黑客松、40+ 条 AI 竞赛管线，代码与提交物料公开</li>
+  <li>RPA（影刀 / 来也 UiBot）一线开发经验，可独立带项目</li>
+</ul>
+
+<footer>
+  <p>全部基于 MIT 许可开源 · 联系：<a href="mailto:2383844705@qq.com">2383844705@qq.com</a> · <a href="https://github.com/Zhiyilang">github.com/Zhiyilang</a></p>
+</footer>
 </body>
 </html>
