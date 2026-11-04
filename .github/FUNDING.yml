@@ -1,2 +1,4 @@
-github: [Zhiyilang]
-custom: ["https://afdian.com/a/Zhiyilang"]
+# GitHub Sponsors 对中国大陆个人不可用，故统一使用官方支持的 custom: 链接。
+# valid keys: github / patreon / ko_fi / liberapay / open_collective / tidelift /
+#             community_bridge / issuehunt / polar / buy_me_a_coffee / thanks_dev / custom
+custom: ["https://afdian.com/a/Zhiyilang", "https://zhiyilang.github.io/#order"]
