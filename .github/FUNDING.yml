@@ -1,4 +1,3 @@
-# GitHub Sponsors 对中国大陆个人不可用，故统一使用官方支持的 custom: 链接。
-# valid keys: github / patreon / ko_fi / liberapay / open_collective / tidelift /
-#             community_bridge / issuehunt / polar / buy_me_a_coffee / thanks_dev / custom
-custom: ["https://afdian.com/a/Zhiyilang", "https://zhiyilang.github.io/#order"]
+# GitHub Sponsors 对中国大陆个人不可用，统一使用官方支持的 custom: 键。
+# 链接指向真实上线的接单报价页（无需注册任何平台即可询价）。
+custom: ["https://zhiyilang.github.io/#order"]
